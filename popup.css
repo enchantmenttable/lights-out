@@ -1,32 +1,34 @@
 body {
-    width: 200px;
+    width: 280px;
     background-color: white;
     color: black;
     font-family: 'Courier New', Courier, monospace;
     margin: 0;
-    padding: 24px 16px;
+    padding: 20px;
 }
 
 .container {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 20px;
+    gap: 15px;
+    opacity: 1;
+    /* Always visible in this simple version */
 }
 
 h1 {
-    font-size: 1.4rem;
+    font-size: 1.8rem;
     margin: 0;
-    letter-spacing: 2px;
     font-weight: 900;
+    letter-spacing: 2px;
 }
 
+/* Original Toggle Switch Styles preserved and refined */
 .switch {
     position: relative;
     display: inline-block;
     width: 60px;
-    height: 30px;
-    border: 2px solid black;
+    height: 34px;
 }
 
 .switch input {
@@ -42,19 +44,20 @@ h1 {
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: white;
-    transition: .4s;
+    background-color: #eee;
+    transition: .2s;
+    border: 3px solid black;
 }
 
 .slider:before {
     position: absolute;
     content: "";
-    height: 22px;
-    width: 22px;
-    left: 4px;
-    top: 4px;
+    height: 18px;
+    width: 18px;
+    left: 5px;
+    bottom: 5px;
     background-color: black;
-    transition: .4s;
+    transition: .2s;
 }
 
 input:checked+.slider {
@@ -62,27 +65,65 @@ input:checked+.slider {
 }
 
 input:checked+.slider:before {
-    transform: translateX(30px);
+    transform: translateX(26px);
     background-color: white;
 }
 
-p {
-    font-size: 0.7rem;
-    margin: 0;
-    text-transform: uppercase;
+#status {
+    font-weight: 900;
+    font-size: 0.9rem;
+    margin: 0 0 10px 0;
 }
 
-button {
-    background: none;
-    border: 1px solid black;
-    padding: 4px 12px;
+/* Schedule Section */
+.schedule-section {
+    width: 100%;
+    border-top: 3px solid black;
+    padding-top: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.schedule-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: 900;
+    font-size: 0.8rem;
+}
+
+/* Mini Toggle for Schedule */
+#scheduleToggle {
     cursor: pointer;
-    font-family: inherit;
-    font-size: 0.7rem;
-    transition: all 0.2s;
+    width: 16px;
+    height: 16px;
+    accent-color: black;
 }
 
-button:hover {
-    background-color: black;
-    color: white;
+.schedule-time-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 900;
+    font-size: 0.8rem;
+}
+
+#scheduleTime {
+    flex: 1;
+    border: 2px solid black;
+    padding: 5px;
+    font-family: inherit;
+    font-weight: 900;
+    outline: none;
+    background: white;
+}
+
+#scheduleTime:disabled {
+    opacity: 0.3;
+    pointer-events: none;
+}
+
+.schedule-section.disabled .schedule-time-wrapper {
+    opacity: 0.3;
 }

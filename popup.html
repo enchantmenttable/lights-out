@@ -9,12 +9,23 @@
 <body>
     <div class="container">
         <h1>LIGHTOUT</h1>
+
         <label class="switch">
-            <input type="checkbox" id="lightToggle" checked>
+            <input type="checkbox" id="lightToggle">
             <span class="slider"></span>
         </label>
         <p id="status">LIGHT IS ON</p>
-        <button id="optionsBtn">OPTIONS</button>
+
+        <div class="schedule-section">
+            <div class="schedule-header">
+                <span>SCHEDULE LIGHTS OUT</span>
+                <input type="checkbox" id="scheduleToggle">
+            </div>
+            <div class="schedule-time-wrapper">
+                <span>AT</span>
+                <input type="time" id="scheduleTime">
+            </div>
+        </div>
     </div>
     <script src="popup.js"></script>
 </body>

@@ -1,40 +1,59 @@
-const toggle = document.getElementById('lightToggle');
+// popup.js
+const lightToggle = document.getElementById('lightToggle');
 const statusText = document.getElementById('status');
-const optionsBtn = document.getElementById('optionsBtn');
+const scheduleToggle = document.getElementById('scheduleToggle');
+const scheduleTimeInput = document.getElementById('scheduleTime');
+const scheduleSection = document.querySelector('.schedule-section');
 
-// Function to update the label text
 function updateStatusText(isOn) {
     statusText.innerText = isOn ? 'LIGHT IS ON' : 'LIGHT IS OUT';
 }
 
-// 1. Initialize state from background service worker (FAST)
-chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-    const activeTab = tabs[0];
-    if (!activeTab || !activeTab.url) return;
+function updateScheduleUI(enabled) {
+    scheduleTimeInput.disabled = !enabled;
+    if (enabled) {
+        scheduleSection.classList.remove('disabled');
+    } else {
+        scheduleSection.classList.add('disabled');
+    }
+}
 
-    // Ask background for the current domain's state
-    chrome.runtime.sendMessage({ type: 'GET_TAB_STATE', url: activeTab.url }, (response) => {
-        if (chrome.runtime.lastError) {
-            console.log('Background not ready:', chrome.runtime.lastError.message);
-            return;
-        }
+// 1. Initialize
+chrome.storage.local.get(['isGlobalLightOut', 'scheduleEnabled', 'scheduleTime'], (result) => {
+    const isLightOut = result.isGlobalLightOut || false;
+    const scheduleEnabled = result.scheduleEnabled || false;
+    const scheduleTime = result.scheduleTime || '22:00';
 
-        if (response) {
-            // Set toggle immediately
-            toggle.checked = !response.isLightOut;
-            updateStatusText(!response.isLightOut);
-        }
-    });
+    // Toggle: checked = light is ON
+    lightToggle.checked = !isLightOut;
+    updateStatusText(!isLightOut);
+
+    scheduleToggle.checked = scheduleEnabled;
+    scheduleTimeInput.value = scheduleTime;
+    updateScheduleUI(scheduleEnabled);
 });
 
-// 2. Handle toggle changes
-toggle.addEventListener('change', () => {
-    const isOn = toggle.checked;
+// 2. Master Toggle
+lightToggle.addEventListener('change', () => {
+    const isOn = lightToggle.checked;
     updateStatusText(isOn);
     chrome.runtime.sendMessage({ type: 'TOGGLE_LIGHTS', state: isOn });
 });
 
-// 3. Open options page
-optionsBtn.addEventListener('click', () => {
-    chrome.runtime.openOptionsPage();
+// 3. Schedule Toggle
+scheduleToggle.addEventListener('change', () => {
+    const enabled = scheduleToggle.checked;
+    updateScheduleUI(enabled);
+    saveSchedule();
 });
+
+// 4. Schedule Time
+scheduleTimeInput.addEventListener('change', () => {
+    saveSchedule();
+});
+
+function saveSchedule() {
+    const enabled = scheduleToggle.checked;
+    const time = scheduleTimeInput.value;
+    chrome.runtime.sendMessage({ type: 'UPDATE_SCHEDULE', enabled, time });
+}
