@@ -1,13 +1,8 @@
 // popup.js
 const lightToggle = document.getElementById('lightToggle');
-const statusText = document.getElementById('status');
 const scheduleToggle = document.getElementById('scheduleToggle');
 const scheduleTimeInput = document.getElementById('scheduleTime');
 const scheduleSection = document.querySelector('.schedule-section');
-
-function updateStatusText(isOn) {
-    statusText.innerText = isOn ? 'LIGHT IS ON' : 'LIGHT IS OUT';
-}
 
 function updateScheduleUI(enabled) {
     scheduleTimeInput.disabled = !enabled;
@@ -26,7 +21,6 @@ chrome.storage.local.get(['isGlobalLightOut', 'scheduleEnabled', 'scheduleTime']
 
     // Toggle: checked = light is ON
     lightToggle.checked = !isLightOut;
-    updateStatusText(!isLightOut);
 
     scheduleToggle.checked = scheduleEnabled;
     scheduleTimeInput.value = scheduleTime;
@@ -36,7 +30,6 @@ chrome.storage.local.get(['isGlobalLightOut', 'scheduleEnabled', 'scheduleTime']
 // 2. Master Toggle
 lightToggle.addEventListener('change', () => {
     const isOn = lightToggle.checked;
-    updateStatusText(isOn);
     chrome.runtime.sendMessage({ type: 'TOGGLE_LIGHTS', state: isOn });
 });
 

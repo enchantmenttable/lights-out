@@ -10,19 +10,23 @@
     <div class="container">
         <h1>LIGHTOUT</h1>
 
-        <label class="switch">
+        <label class="switch hero-switch">
             <input type="checkbox" id="lightToggle">
             <span class="slider"></span>
         </label>
-        <p id="status">LIGHT IS ON</p>
+
+        <hr class="separator">
 
         <div class="schedule-section">
-            <div class="schedule-header">
-                <span>SCHEDULE LIGHTS OUT</span>
-                <input type="checkbox" id="scheduleToggle">
+            <div class="schedule-row">
+                <span class="schedule-label">SCHEDULE</span>
+                <label class="switch mini-switch">
+                    <input type="checkbox" id="scheduleToggle">
+                    <span class="slider"></span>
+                </label>
             </div>
             <div class="schedule-time-wrapper">
-                <span>AT</span>
+                <span class="at-label">AT</span>
                 <input type="time" id="scheduleTime">
             </div>
         </div>

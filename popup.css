@@ -1,5 +1,5 @@
 body {
-    width: 280px;
+    width: 150px;
     background-color: white;
     color: black;
     font-family: 'Courier New', Courier, monospace;
@@ -11,24 +11,21 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 15px;
-    opacity: 1;
-    /* Always visible in this simple version */
+    gap: 20px;
 }
 
 h1 {
-    font-size: 1.8rem;
+    font-size: 1.2rem;
     margin: 0;
     font-weight: 900;
     letter-spacing: 2px;
+    align-self: flex-start;
 }
 
-/* Original Toggle Switch Styles preserved and refined */
+/* Base Toggle Switch */
 .switch {
     position: relative;
     display: inline-block;
-    width: 60px;
-    height: 34px;
 }
 
 .switch input {
@@ -44,79 +41,128 @@ h1 {
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: #eee;
     transition: .2s;
-    border: 3px solid black;
 }
 
 .slider:before {
     position: absolute;
     content: "";
-    height: 18px;
-    width: 18px;
-    left: 5px;
-    bottom: 5px;
-    background-color: black;
     transition: .2s;
 }
 
-input:checked+.slider {
+/* Hero Switch - 40% height of top area approximation */
+.hero-switch {
+    width: 140px;
+    height: 80px;
+}
+
+.hero-switch .slider {
+    background-color: transparent;
+    border: 4px solid black;
+}
+
+.hero-switch .slider:before {
+    height: 60px;
+    width: 60px;
+    left: 6px;
+    bottom: 6px;
     background-color: black;
 }
 
-input:checked+.slider:before {
-    transform: translateX(26px);
+.hero-switch input:checked+.slider {
+    background-color: black;
+}
+
+.hero-switch input:checked+.slider:before {
+    transform: translateX(60px);
     background-color: white;
 }
 
-#status {
-    font-weight: 900;
-    font-size: 0.9rem;
-    margin: 0 0 10px 0;
+/* Thin Separator */
+.separator {
+    width: 100%;
+    border: none;
+    border-top: 1px solid black;
+    margin: 0;
 }
 
 /* Schedule Section */
 .schedule-section {
     width: 100%;
-    border-top: 3px solid black;
-    padding-top: 15px;
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 8px;
 }
 
-.schedule-header {
+.schedule-row {
     display: flex;
     justify-content: space-between;
     align-items: center;
+}
+
+.schedule-label {
     font-weight: 900;
-    font-size: 0.8rem;
+    font-size: 1rem;
 }
 
-/* Mini Toggle for Schedule */
-#scheduleToggle {
-    cursor: pointer;
-    width: 16px;
-    height: 16px;
-    accent-color: black;
+/* Mini Switch */
+.mini-switch {
+    width: 36px;
+    height: 20px;
 }
 
+.mini-switch .slider {
+    background-color: #eee;
+    border: 2px solid black;
+}
+
+.mini-switch .slider:before {
+    height: 12px;
+    width: 12px;
+    left: 2px;
+    bottom: 2px;
+    background-color: black;
+}
+
+.mini-switch input:checked+.slider {
+    background-color: black;
+}
+
+.mini-switch input:checked+.slider:before {
+    transform: translateX(16px);
+    background-color: white;
+}
+
+/* Time Input Wrapper - Indented */
 .schedule-time-wrapper {
     display: flex;
+    justify-content: flex-end;
     align-items: center;
     gap: 10px;
-    font-weight: 900;
-    font-size: 0.8rem;
 }
 
-#scheduleTime {
-    flex: 1;
-    border: 2px solid black;
-    padding: 5px;
-    font-family: inherit;
+.at-label {
     font-weight: 900;
+    font-size: 0.9rem;
+}
+
+/* Typewriter Box Time Input */
+#scheduleTime {
+    width: 90px;
+    border: 2px solid black;
+    padding: 4px 8px;
+    font-family: 'Courier New', Courier, monospace;
+    font-weight: 900;
+    font-size: 1rem;
     outline: none;
     background: white;
+    text-align: center;
+}
+
+/* Remove default clock icon */
+#scheduleTime::-webkit-calendar-picker-indicator {
+    display: none;
+    -webkit-appearance: none;
 }
 
 #scheduleTime:disabled {
