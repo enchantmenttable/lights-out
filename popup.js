@@ -4,6 +4,20 @@ const scheduleToggle = document.getElementById('scheduleToggle');
 const scheduleTimeInput = document.getElementById('scheduleTime');
 const scheduleSection = document.querySelector('.schedule-section');
 
+const statusText = document.getElementById('statusText');
+
+function applyTheme(isLightOut) {
+    if (isLightOut) {
+        document.body.classList.remove('theme-light');
+        document.body.classList.add('theme-dark');
+        statusText.textContent = 'Light is off';
+    } else {
+        document.body.classList.remove('theme-dark');
+        document.body.classList.add('theme-light');
+        statusText.textContent = 'Light is on';
+    }
+}
+
 function updateScheduleUI(enabled) {
     scheduleTimeInput.disabled = !enabled;
     if (enabled) {
@@ -19,8 +33,10 @@ chrome.storage.local.get(['isGlobalLightOut', 'scheduleEnabled', 'scheduleTime']
     const scheduleEnabled = result.scheduleEnabled || false;
     const scheduleTime = result.scheduleTime || '22:00';
 
-    // Toggle: checked = light is ON
-    lightToggle.checked = !isLightOut;
+    // Toggle: checked = light is OUT (Moon state)
+    // The asset logic: checked = Night Mode
+    lightToggle.checked = isLightOut;
+    applyTheme(isLightOut);
 
     scheduleToggle.checked = scheduleEnabled;
     scheduleTimeInput.value = scheduleTime;
@@ -29,8 +45,9 @@ chrome.storage.local.get(['isGlobalLightOut', 'scheduleEnabled', 'scheduleTime']
 
 // 2. Master Toggle
 lightToggle.addEventListener('change', () => {
-    const isOn = lightToggle.checked;
-    chrome.runtime.sendMessage({ type: 'TOGGLE_LIGHTS', state: isOn });
+    const isLightOut = lightToggle.checked;
+    applyTheme(isLightOut);
+    chrome.runtime.sendMessage({ type: 'TOGGLE_LIGHTS', state: !isLightOut });
 });
 
 // 3. Schedule Toggle
