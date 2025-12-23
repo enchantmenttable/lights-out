@@ -5,6 +5,7 @@
 }
 
 body {
+    /* width: 240px; */
     width: 320px;
     margin: 0;
     padding: 24px;
@@ -60,7 +61,7 @@ h1 {
     font-weight: 500;
     letter-spacing: -0.02em;
     align-self: flex-start;
-    text-transform: uppercase;
+    /* text-transform: uppercase; */
     opacity: 0.8;
 }
 
@@ -278,12 +279,26 @@ body.theme-dark .separator {
     display: flex;
     flex-direction: column;
     gap: 12px;
+    padding: 16px;
+    background: rgba(0, 0, 0, 0.03);
+    border-radius: 20px;
+    box-sizing: border-box;
+}
+
+body.theme-dark .schedule-section {
+    background: rgba(255, 255, 255, 0.03);
 }
 
 .schedule-row {
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    align-items: flex-start;
+}
+
+.schedule-header {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
 }
 
 .schedule-label {
@@ -293,9 +308,9 @@ body.theme-dark .separator {
     opacity: 0.8;
 }
 
-/* Mini Switch */
+/* Custom Mini Switch (Pill Style) */
 .mini-switch {
-    width: 36px;
+    width: 40px;
     height: 20px;
     position: relative;
     display: inline-block;
@@ -316,7 +331,11 @@ body.theme-dark .separator {
     bottom: 0;
     background-color: rgba(0, 0, 0, 0.1);
     border-radius: 20px;
-    transition: .3s;
+    transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+body.theme-dark .mini-switch .slider {
+    background-color: rgba(255, 255, 255, 0.1);
 }
 
 .mini-switch .slider:before {
@@ -328,42 +347,42 @@ body.theme-dark .separator {
     bottom: 3px;
     background-color: white;
     border-radius: 50%;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
-    transition: .3s;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+/* ON State - Periwinkle */
 .mini-switch input:checked+.slider {
-    background-color: #3498db;
+    background-color: #a29bfe;
 }
 
 .mini-switch input:checked+.slider:before {
-    transform: translateX(16px);
+    transform: translateX(20px);
 }
 
 /* Time Input Wrapper */
 .schedule-time-wrapper {
     display: flex;
-    justify-content: flex-end;
     align-items: center;
-    gap: 12px;
+    gap: 8px;
 }
 
 .at-label {
     font-weight: 500;
-    font-size: 0.85rem;
+    font-size: 0.8rem;
     opacity: 0.8;
 }
 
 #scheduleTime {
-    width: 90px;
+    width: 85px;
     border: 1px solid rgba(0, 0, 0, 0.1);
-    padding: 6px 12px;
-    border-radius: 12px;
+    padding: 4px 8px;
+    border-radius: 10px;
     font-family: inherit;
     font-weight: 500;
-    font-size: 0.95rem;
+    font-size: 0.85rem;
     outline: none;
-    background: rgba(255, 255, 255, 0.7);
+    background: rgba(255, 255, 255, 0.4);
     text-align: center;
     transition: border 0.2s, background 0.2s;
     color: inherit;
