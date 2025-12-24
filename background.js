@@ -1,16 +1,11 @@
 // background.js
 
 let isGlobalLightOut = false;
-let scheduleEnabled = false;
-let scheduleTime = '22:00'; // Default
-let lastTriggerDate = ''; // 'YYYY-MM-DD'
+
 
 // Load initial states
-chrome.storage.local.get(['isGlobalLightOut', 'scheduleEnabled', 'scheduleTime', 'lastTriggerDate'], (result) => {
+chrome.storage.local.get(['isGlobalLightOut'], (result) => {
     isGlobalLightOut = result.isGlobalLightOut || false;
-    scheduleEnabled = result.scheduleEnabled || false;
-    scheduleTime = result.scheduleTime || '22:00';
-    lastTriggerDate = result.lastTriggerDate || '';
 });
 
 // Sound logic
@@ -49,23 +44,7 @@ function broadcast(message) {
     });
 }
 
-// Daily Heartbeat (check every minute)
-setInterval(() => {
-    if (!scheduleEnabled) return;
 
-    const now = new Date();
-    const today = now.toISOString().split('T')[0];
-    const currentTime = now.toTimeString().slice(0, 5); // 'HH:MM'
-
-    if (currentTime === scheduleTime && lastTriggerDate !== today) {
-        isGlobalLightOut = true;
-        lastTriggerDate = today;
-
-        chrome.storage.local.set({ isGlobalLightOut: true, lastTriggerDate: today });
-        playSound('off');
-        broadcast({ type: 'LIGHTS_OUT' });
-    }
-}, 30000); // Check every 30s for robustness
 
 // Message Handling
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
@@ -83,12 +62,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
         return;
     }
 
-    if (message.type === 'UPDATE_SCHEDULE') {
-        scheduleEnabled = message.enabled;
-        scheduleTime = message.time;
-        chrome.storage.local.set({ scheduleEnabled, scheduleTime });
-        return;
-    }
+
 });
 
 // Handle new tabs
