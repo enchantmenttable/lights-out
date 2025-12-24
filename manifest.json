@@ -1,13 +1,13 @@
 {
     "manifest_version": 3,
-    "name": "Lightout - True Dark Mode",
+    "name": "Lights Out - True Dark Mode",
     "version": "1.0",
     "icons": {
         "16": "icons/icon16.png",
         "48": "icons/icon48.png",
         "128": "icons/icon128.png"
     },
-    "description": "Automatically turns the lights out on your favorite sites with a flashlight cursor.",
+    "description": "True dark mode! So dark you have to use a flashlight.",
     "permissions": [
         "storage",
         "offscreen"
@@ -31,7 +31,7 @@
     ],
     "action": {
         "default_popup": "popup.html",
-        "default_title": "Lightout",
+        "default_title": "Lights Out",
         "default_icon": {
             "16": "icons/icon16.png",
             "48": "icons/icon48.png",
