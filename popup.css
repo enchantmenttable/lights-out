@@ -7,13 +7,17 @@
 body {
     width: auto;
     min-width: 240px;
-    height: 160px;
+    height: auto;
+    min-height: 160px;
     margin: 0;
     padding: 0;
     font-family: 'Inter', system-ui, -apple-system, sans-serif;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
+    padding: 20px 24px;
+    gap: 16px;
     transition: background-color var(--theme-duration) var(--theme-ease);
 }
 
@@ -223,4 +227,82 @@ body.theme-dark {
 .theme-switch__checkbox:checked+.theme-switch__container .theme-switch__stars-container {
     top: 50%;
     transform: translateY(-50%);
+}
+
+/* Schedule Section */
+.schedule-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+
+.schedule-label {
+    font-size: 11px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    opacity: 0.6;
+    transition: color var(--theme-duration) var(--theme-ease),
+                opacity var(--theme-duration) var(--theme-ease);
+}
+
+.schedule-inputs {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.schedule-time {
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    width: auto;
+    padding: 6px 10px;
+    border: none;
+    border-radius: 8px;
+    outline: none;
+    text-align: center;
+    transition: background-color var(--theme-duration) var(--theme-ease),
+                color var(--theme-duration) var(--theme-ease),
+                box-shadow var(--theme-duration) var(--theme-ease);
+}
+
+.schedule-time::-webkit-calendar-picker-indicator {
+    display: none;
+}
+
+.schedule-separator {
+    font-size: 14px;
+    font-weight: 400;
+    opacity: 0.5;
+    transition: color var(--theme-duration) var(--theme-ease);
+}
+
+/* Schedule Light Theme */
+body.theme-light .schedule-time {
+    background-color: #f0ebe3;
+    color: #495057;
+    box-shadow: inset 2px 2px 4px rgba(0, 0, 0, 0.08),
+                inset -2px -2px 4px rgba(255, 255, 255, 0.9);
+}
+
+body.theme-light .schedule-time:focus {
+    box-shadow: inset 2px 2px 4px rgba(0, 0, 0, 0.1),
+                inset -2px -2px 4px rgba(255, 255, 255, 0.9),
+                0 0 0 2px rgba(61, 126, 174, 0.3);
+}
+
+/* Schedule Dark Theme */
+body.theme-dark .schedule-time {
+    background-color: #1a1c28;
+    color: #e9ecef;
+    box-shadow: inset 2px 2px 4px rgba(0, 0, 0, 0.3),
+                inset -2px -2px 4px rgba(255, 255, 255, 0.03);
+}
+
+body.theme-dark .schedule-time:focus {
+    box-shadow: inset 2px 2px 4px rgba(0, 0, 0, 0.3),
+                inset -2px -2px 4px rgba(255, 255, 255, 0.03),
+                0 0 0 2px rgba(196, 201, 209, 0.2);
 }

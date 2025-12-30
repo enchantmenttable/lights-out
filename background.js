@@ -1,11 +1,75 @@
 // background.js
 
 let isGlobalLightOut = false;
-
+let schedule = { startTime: '12:00', endTime: '12:00' };
+let lastScheduleState = null; // Track previous schedule state to detect transitions
 
 // Load initial states
-chrome.storage.local.get(['isGlobalLightOut'], (result) => {
+chrome.storage.local.get(['isGlobalLightOut', 'schedule'], (result) => {
     isGlobalLightOut = result.isGlobalLightOut || false;
+    schedule = result.schedule || { startTime: '12:00', endTime: '12:00' };
+    // Initialize lastScheduleState to current state so we don't trigger on startup
+    lastScheduleState = isWithinSchedule(schedule.startTime, schedule.endTime);
+});
+
+// Schedule checking logic
+function isWithinSchedule(startTime, endTime) {
+    if (startTime === endTime) return null; // Schedule disabled
+
+    const now = new Date();
+    const nowMinutes = now.getHours() * 60 + now.getMinutes();
+
+    const [startH, startM] = startTime.split(':').map(Number);
+    const [endH, endM] = endTime.split(':').map(Number);
+    const startMinutes = startH * 60 + startM;
+    const endMinutes = endH * 60 + endM;
+
+    if (startMinutes < endMinutes) {
+        // Same day range (e.g., 09:00 - 17:00)
+        return nowMinutes >= startMinutes && nowMinutes < endMinutes;
+    } else {
+        // Overnight range (e.g., 22:00 - 06:00)
+        return nowMinutes >= startMinutes || nowMinutes < endMinutes;
+    }
+}
+
+function checkSchedule() {
+    const currentScheduleState = isWithinSchedule(schedule.startTime, schedule.endTime);
+
+    if (currentScheduleState === null) {
+        lastScheduleState = null;
+        return; // Schedule disabled
+    }
+
+    // Only trigger on transition (when schedule state changes)
+    if (currentScheduleState !== lastScheduleState) {
+        lastScheduleState = currentScheduleState;
+
+        // Entering "lights out" period: turn off (if currently on)
+        // Exiting "lights out" period: turn on (only if currently off, i.e. following schedule)
+        if (currentScheduleState && !isGlobalLightOut) {
+            // Start time reached, turn lights off
+            isGlobalLightOut = true;
+            chrome.storage.local.set({ isGlobalLightOut });
+            playSound('off');
+            broadcast({ type: 'LIGHTS_OUT' });
+        } else if (!currentScheduleState && isGlobalLightOut) {
+            // End time reached and lights are off, turn them on
+            isGlobalLightOut = false;
+            chrome.storage.local.set({ isGlobalLightOut });
+            playSound('on');
+            broadcast({ type: 'LIGHTS_ON' });
+        }
+    }
+}
+
+// Set up alarm to check schedule every minute
+chrome.alarms.create('scheduleCheck', { periodInMinutes: 1 });
+
+chrome.alarms.onAlarm.addListener((alarm) => {
+    if (alarm.name === 'scheduleCheck') {
+        checkSchedule();
+    }
 });
 
 // Sound logic
@@ -62,7 +126,22 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
         return;
     }
 
+    if (message.type === 'SCHEDULE_UPDATED') {
+        schedule = message.schedule;
+        const currentScheduleState = isWithinSchedule(schedule.startTime, schedule.endTime);
 
+        // If current time is within new schedule and lights are on, turn them off
+        if (currentScheduleState === true && !isGlobalLightOut) {
+            isGlobalLightOut = true;
+            chrome.storage.local.set({ isGlobalLightOut });
+            playSound('off');
+            broadcast({ type: 'LIGHTS_OUT' });
+        }
+
+        // Set lastScheduleState so we don't re-trigger on next alarm check
+        lastScheduleState = currentScheduleState;
+        return;
+    }
 });
 
 // Handle new tabs

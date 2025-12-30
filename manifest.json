@@ -10,7 +10,8 @@
     "description": "True dark mode! So dark you have to use a flashlight.",
     "permissions": [
         "storage",
-        "offscreen"
+        "offscreen",
+        "alarms"
     ],
     "host_permissions": [
         "<all_urls>"
