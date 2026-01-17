@@ -70,5 +70,15 @@ document.addEventListener('click', (e) => {
     }
 });
 
+// Save and unfocus when pressing Enter
+[scheduleStart, scheduleEnd].forEach(input => {
+    input.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+            saveScheduleIfChanged();
+            input.blur();
+        }
+    });
+});
+
 // Save when popup closes
 window.addEventListener('beforeunload', saveScheduleIfChanged);
